@@ -27,7 +27,7 @@ scaled_data = scaler.fit_transform(data_rise_filtered)
 
 #
 # Function to perform clustering by load level and cycle
-def perform_clustering(data, eps=2):
+def perform_clustering(data, eps=3):
     clustering_results = {}
 
     for load_level in data['load level'].unique():
@@ -48,7 +48,7 @@ def perform_clustering(data, eps=2):
         scaled_data = scaler.fit_transform(numeric_data)
 
         # Define a dynamic value for min_samples based on the level size
-        min_samples = max(2, min(10, len(subset)))
+        min_samples = max(2, min(5, len(subset)))
 
         # Apply DBSCAN
         db = DBSCAN(eps=eps, min_samples=min_samples).fit(scaled_data)
@@ -74,5 +74,5 @@ clustering_results = perform_clustering(data_rise)
 # Save the results
 for load_level, df in clustering_results.items():
     output_file = f"clustering_results_{load_level}.xlsx"
-    #df.to_excel(output_file, index=False)
+    df.to_excel(output_file, index=False)
     print(f"Results for {load_level} saved in {output_file}")
